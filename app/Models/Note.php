@@ -9,14 +9,20 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'plant_id',
-        'note',
-        'task',
+    protected $fillable = 
+    [
+        'plant_id', 
+        'user_id', 
+        'note'
     ];
 
     public function plant()
     {
         return $this->belongsTo(Plant::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

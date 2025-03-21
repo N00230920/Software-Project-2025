@@ -47,7 +47,7 @@
 
     <!-- Image upload field -->
     <div class="mb-4">
-        <label for="image" class="block text-sm font-medium text-gray-700">plant Cover Image</label>
+        <label for="image" class="block text-sm font-medium text-gray-700">Plant Cover Image</label>
         <input
             type="file"
             name="image"

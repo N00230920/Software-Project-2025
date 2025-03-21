@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlantController;
+use App\Http\Controllers\NoteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,5 +29,5 @@ Route::delete('/plants/{plant}', [PlantController::class, 'destroy'])->name('pla
 
 
 Route::resource('notes', NoteController::class);
-Route::post('plants/{plant}/notes', [PlantController::class,'store'])->name('notes.store');
+Route::post('/plants/{plant}/notes', [NoteController::class,'store'])->name('notes.store');
 require __DIR__.'/auth.php';

@@ -69,8 +69,8 @@ class PlantController extends Controller
      */
     public function show(Plant $plant)
     {
-        $plant->load('notes.plant');
-        return view('plants.show')->with('plant', $plant);
+        $plant->load('notes.user');
+        return view('plants.show', compact('plant'));
     }
 
     /**

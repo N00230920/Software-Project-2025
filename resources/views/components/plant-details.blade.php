@@ -7,14 +7,13 @@
 <h1 class="font-bold text-black-600 mb-2" style="font-size: 3rem;">{{ $name }}</h1> <!-- Heading with larger text and color --> 
 
 
-
 <!-- Book Cover Image --> 
 
 <div class="overflow-hidden rounded-lg mb-4 flex justify-center"> 
 
 <!-- Image is further restricted to a smaller size --> 
 
-<img src="{{ asset('images/books/' . $image) }}" alt="{{ $name }}" class="w-full max-w-xs h-auto object-cover"> <!-- Restrict image to max-w-xs (20rem) and ensure responsiveness --> 
+<img src="{{ asset('images/' . $image) }}" alt="{{ $name }}" class="w-full max-w-xs h-auto object-cover"> <!-- Restrict image to max-w-xs (20rem) and ensure responsiveness --> 
 
 </div> 
 
@@ -26,7 +25,7 @@
 
 <!-- Book Description --> 
 
-<h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">Description</h3> <!-- Subheading for description --> 
+<h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">Information</h3> <!-- Subheading for description --> 
 <p class="text-gray-700 leading-relaxed">{{ $info }}</p> <!-- Text is spaced out for readability --> 
 
 </div> 

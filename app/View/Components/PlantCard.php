@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 
-class PlantPin extends Component
+class PlantCard extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class PlantPin extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.plant-pin');
+        return view('components.plant-card');
     }
 }

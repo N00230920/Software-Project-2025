@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Note;
+use App\Models\Plant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -29,20 +29,20 @@ class NoteController extends Controller
  */
 public function store(Request $request, Plant $plant)
 {
+    // ✅ Validate input data
     $request->validate([
         'note' => 'nullable|string|max:1000',
-        'task' => 'nullable|string|max:1000'
     ]);
 
-    // Create the review associated with the book and user
-    $book->reviews()->create([
+    // ✅ Create the note associated with the plant and user
+$plant->notes()->create([
+
         'user_id' => auth()->id(),
         'note' => $request->input('note'),
-        'task' => $request->input('task'),
-        'plant_id' => $plant->id
     ]);
 
-    return redirect()->route('plants.show', $book)->with('success', 'Note added successfully.');
+    // ✅ Redirect back with success message
+    return redirect()->route('plants.show', $plant)->with('success', 'Note added successfully.');
 }
 
     
