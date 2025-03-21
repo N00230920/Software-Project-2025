@@ -17,4 +17,9 @@ class Plant extends Model
         'image',
         ];
 
+        public function notes()
+        {
+            return $this->hasMany(Note::class);
+        }
+
 }

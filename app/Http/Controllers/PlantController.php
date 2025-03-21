@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Plant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PlantController extends Controller
 {
@@ -23,6 +22,9 @@ class PlantController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('plants.index')->with('error', 'Access Denied.');
+        }
         return view('plants.create');
     }
 
@@ -31,42 +33,44 @@ class PlantController extends Controller
      */
     public function store(Request $request)
     {
-            // Validate input
-            $request->validate([
-                'name' => 'required',
-                'info' => 'required|max:500',
-                'location' => 'required',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-        
-            // Check if the image is uploaded and handle it
-            if ($request->hasFile('image')) {
-                $imageName = time().'.'.$request->image->extension();
-                $request->image->move(public_path('images/books'), $imageName);
-            }
-        
-            // Create a book record in the database
-            Book::create([
-                'name' => $request->name,
-                'info' => $request->info, 
-                'species' => $request->species,
-                'location' => $request->location,
-                'image' => $imageName, // Store the image filename in the DB
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        
-            // Redirect to the index page with a success message
-            return to_route('plants.index')->with('success', 'Plant created successfully!');
+        // Validate input
+        $request->validate([
+            'name' => 'required',
+            'info' => 'required|max:500',
+            'species' => 'required',
+            'location' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Check if the image is uploaded and handle it
+        $imageName = null; // Initialize imageName
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/plants'), $imageName);
         }
-        
+
+        // Create a plant record in the database
+        $plantData = [
+            'name' => $request->name,
+            'info' => $request->info,
+            'species' => $request->species,
+            'location' => $request->location,
+            'image' => $imageName // Store the image filename in the DB if uploaded
+        ];
+
+        Plant::create($plantData);
+
+        // Redirect to the index page with a success message
+        return to_route('plants.index')->with('success', 'Plant created successfully!');
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(Plant $plant)
     {
-        return view('plants.show')->with('plant',$plant);
+        $plant->load('notes.plant');
+        return view('plants.show')->with('plant', $plant);
     }
 
     /**
@@ -74,7 +78,7 @@ class PlantController extends Controller
      */
     public function edit(Plant $plant)
     {
-        //
+        return view('plants.edit', compact('plant'));
     }
 
     /**
@@ -82,7 +86,23 @@ class PlantController extends Controller
      */
     public function update(Request $request, Plant $plant)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'info' => 'required|max:500',
+            'location' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Check if the image is uploaded and handle it
+        $imageName = null; // Initialize imageName
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/plants'), $imageName);
+        }
+
+        $plant->update(array_merge($validatedData, ['image' => $imageName]));
+
+        return redirect()->route('plants.index')->with('success', 'Plant updated successfully');
     }
 
     /**
@@ -90,6 +110,8 @@ class PlantController extends Controller
      */
     public function destroy(Plant $plant)
     {
-        //
+        $plant->delete();
+
+        return redirect()->route('plants.index')->with('success', 'Plant deleted successfully!');
     }
 }
