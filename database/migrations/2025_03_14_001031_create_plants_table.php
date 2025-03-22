@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('info')->nullable();
             $table->string('location');
             $table->string('image')->nullable();
-            $table->date('date_added')->timestamps();
+            $table->date('date_added')->default(DB::raw('CURRENT_DATE'));
             $table->timestamps();
         });
     }

@@ -30,6 +30,22 @@
                                     <p>Task: {{ $note->task }} / 5</p>
                                     <p>{{ $note->note }}</p>
                                 </div>
+                                    @if ($note->user_id === auth()->id() || auth()->user()?->role === 'admin')
+                                        <a href="{{ route('notes.edit', $note) }}" 
+                                            class="bg-yellow-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+                                            {{ __('Edit note') }}
+                                        </a>
+
+                                        <form method="POST" action="{{ route('notes.destroy', $note) }}" onsubmit="return confirm('Are you sure you want to delete this plant from garden?');">
+                                            @csrf
+                                            @method('delete')
+                                            <a class="bg-red-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" href="{{ route('notes.destroy', $note) }}"
+                                            onclick="event.preventDefault(); this.closest('form').submit();">
+                                                {{ __('Delete note') }}
+                                            </a>
+                                        </form>
+                                    @endif
+                                </div>
                             @endforeach
                         </div>
                     @endif
@@ -38,17 +54,6 @@
                     <h4 class="font-semibold text-md mt-8">Add a Note</h4>
                     <form action="{{ route('notes.store', ['plant' => $plant->id]) }}" method="POST" class="mt-4">
                     @csrf
-                        <div class="grid gap-4">
-                            <div class="notes">
-                                <label for="notes" class="block font-medium text-sm text-gray-700">Notes</label>
-                                <select id="notes" name="notes" class="mt-1 block w-full" required>
-                                    <option value="1">⭐1</option>
-                                    <option value="2">⭐⭐2</option>
-                                    <option value="3">⭐⭐⭐3</option>
-                                    <option value="4">⭐⭐⭐⭐4</option>
-                                    <option value="5">⭐⭐⭐⭐⭐5</option>
-                                </select>
-                            </div>
 
                             <div class="note">
                                 <label for="note" class="block font-medium text-sm text-gray-700">Note</label>

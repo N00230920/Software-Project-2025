@@ -11,10 +11,10 @@
                 <div class="p-6 text-gray-900">
                 <h3 class="font-semibold text-lg mb-4">Pot a new Plant:</h3>
                             <x-plant-form
-                                :action ="route('plants.store')"
+                                :action="route('plants.store')"
                                 :method="'POST'"
                             />
-                            
+
                     </div>
                 </div>
             </div>

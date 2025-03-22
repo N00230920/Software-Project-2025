@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plant;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PlantController extends Controller
 {
@@ -55,7 +56,8 @@ class PlantController extends Controller
             'info' => $request->info,
             'species' => $request->species,
             'location' => $request->location,
-            'image' => $imageName // Store the image filename in the DB if uploaded
+            'image' => $imageName, // Store the image filename in the DB if uploaded
+            'date_added' => now(), // Ensure date_added is set
         ];
 
         Plant::create($plantData);

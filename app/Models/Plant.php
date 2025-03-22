@@ -15,6 +15,7 @@ class Plant extends Model
         'species',
         'location',
         'image',
+        'date_added'
         ];
 
         public function notes()

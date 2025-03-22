@@ -14,33 +14,62 @@
             <input
                 type="text"
 
-                name="title"
+                name="name"
         id="name"
-        value="{{ old('title', $plant->title ?? '') }}"
+        value="{{ old('name', $plant->name ?? '') }}"
         required
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
-        @error('title')
+        @error('name')
             <p class="text-sm text-red-600">{{ $message }}</p>
         @enderror
     </div>
 
-    <!-- Genre dropdown -->
+    <!-- Information -->
     <div class="mb-4">
-            <label for="genre" class="block text-sm text-gray-700">Location</label>
-            <select id="genre" class="rounded mb-2" name="genre">
-                <option value="">Select a genre</option> 
-                <option value="action">action</option>
-                <option value="adventure">adventure</option>
-                <option value="adult animation">adult animation</option>
-                <option value="anime">anime</option>
-                <option value="crime">crime</option>
-                <option value="fantasy">fantasy</option>
-                <option value="historical">historical</option>
-                <option value="horror">horror</option>
-                <option value="romance">romance</option>
-                <option value="sci-fi">sci-fi</option>
+            <label for="title" class="block text-sm text-gray-700">Information</label>
+            <input
+                type="text"
+                name="info"
+        id="info"
+        value="{{ old('info', $plant->info ?? '') }}"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+        @error('info')
+            <p class="text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <!-- Species -->
+    <div class="mb-4">
+            <label for="title" class="block text-sm text-gray-700">Species</label>
+            <input
+                type="text"
+                name="species"
+        id="species"
+        value="{{ old('species', $plant->species ?? '') }}"
+        required
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+        @error('species')
+            <p class="text-sm text-red-600">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <!-- location dropdown -->
+    <div class="mb-4">
+            <label for="location" class="block text-sm text-gray-700">Location</label>
+            <select id="location" class="rounded mb-2" name="location">
+                <option value="">Select a location</option> 
+                <option value="Bedroom">Bedroom</option>
+                <option value="Living Room">Living Room</option>
+                <option value="Bathroom">Bathroom</option>
+                <option value="Balcony">Balcony</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Entry Way">Entry Way</option>
+                <option value="Sun Room">Sun Room</option>
+                <option value="Garden">Garden</option>
+                <option value="other">other</option>
             </select>
-        @error('genre')
+        @error('location')
             <p class="text-sm text-red-600">{{ $message }}</p>
         @enderror
     </div>
