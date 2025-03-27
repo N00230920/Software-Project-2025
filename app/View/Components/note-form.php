@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 
-class note-form extends Component
+class Noteform extends Component
 {
     /**
      * Create a new component instance.

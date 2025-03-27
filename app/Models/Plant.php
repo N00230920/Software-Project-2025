@@ -23,4 +23,14 @@ class Plant extends Model
             return $this->hasMany(Note::class);
         }
 
+        public function maintenances()
+        {
+            return $this->belongsTo(Maintenance::class);
+        }
+
+        public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'plant_user')->withTimestamps();
+    }
+
 }

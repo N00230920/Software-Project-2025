@@ -70,8 +70,11 @@ class PlantController extends Controller
      * Display the specified resource.
      */
     public function show(Plant $plant)
+    
     {
         $plant->load('notes.user');
+        $plant->load('maintenances.plant');
+
         return view('plants.show', compact('plant'));
     }
 

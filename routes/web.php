@@ -29,8 +29,12 @@ Route::delete('/plants/{plant}', [PlantController::class, 'destroy'])->name('pla
 
 
 Route::resource('notes', NoteController::class);
-Route::post('/plants/{plant}/notes', [NoteController::class,'store'])->name('notes.store');
-Route::get('/notes/{note}/edit', [NoteController::class, 'edit'])->name('notes.edit');
-Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
-Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+Route::post('/notes', [NoteController::class,'store'])->name('notes.store');
+
+Route::resources('maintenance', MaintenanceController::class);
+Route::post('/maintenance', [MaintenanceController::class,'store'])->name('maintenance.store');
+
+Route::post('/users/{userId}/plants/{plantId}/assign', [PlantUserController::class, 'assignPlantToUser']);
+
+
 require __DIR__.'/auth.php';
