@@ -18,7 +18,6 @@ class NoteController extends Controller
         return view('notes.index', compact('notes')); // Pass notes to the view
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -27,28 +26,30 @@ class NoteController extends Controller
         //
     }
 
-        /**
- * Store a newly created resource in storage.
- */
-public function store(Request $request, Plant $plant)
-{
-    // ✅ Validate input data
-    $request->validate([
-        'note' => 'nullable|string|max:1000',
-    ]);
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, Plant $plant)
+    {
+        \Log::info('Request data:', $request->all()); // Log incoming request data
 
-    // ✅ Create the note associated with the plant and user
-$plant->notes()->create([
+        // Validate input data
+        $request->validate([
+            'note' => 'nullable|string|max:1000',
+        ]);
 
-        'user_id' => auth()->id(),
-        'note' => $request->input('note'),
-    ]);
+        // Create the note associated with the plant and user
+        \Log::info('Creating note for plant:', ['plant_id' => $plant->id]); // Log plant ID
 
-    // ✅ Redirect back with success message
-    return redirect()->route('plants.show', $plant)->with('success', 'Note added successfully.');
-}
+        $plant->notes()->create([
+            'user_id' => auth()->id(),
+            'note' => $request->input('note'),
+            'plant_id' => $plant->id, // Ensure plant_id is set
+        ]);
 
-    
+        // Redirect back with success message
+        return redirect()->route('plants.show', $plant)->with('success', 'Note added successfully.');
+    }
 
     /**
      * Display the specified resource.
@@ -67,14 +68,13 @@ $plant->notes()->create([
         return view('notes.edit', compact('note', 'plant'));
     }
 
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Note $note)
     {
         $note->update($request->only(['note']));
-        return redirect()->route('plants.show',$note->plant_id) ->with('success','Note updated successfully.');
+        return redirect()->route('plants.show', $note->plant_id)->with('success', 'Note updated successfully.');
     }
 
     /**
@@ -84,8 +84,7 @@ $plant->notes()->create([
     {
         $note->delete();
 
-       $plant = $note->plant; // Assuming the Note model has a relationship with Plant
-       return redirect()->route('plants.show', $plant)->with('success', 'Note deleted successfully!');
-
+        $plant = $note->plant; // Assuming the Note model has a relationship with Plant
+        return redirect()->route('plants.show', $plant)->with('success', 'Note deleted successfully!');
     }
 }

@@ -19,40 +19,20 @@
         value="{{ old('name', $plant->name ?? '') }}"
         required
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
-        @error('name')
-            <p class="text-sm text-red-600">{{ $message }}</p>
-        @enderror
+    @error('name')
+        <p class="text-sm text-red-600" role="alert">{{ $message }}</p>
+    @enderror
+
+    @error('location')
+        <p class="text-sm text-red-600" role="alert">{{ $message }}</p>
+    @enderror
+
+    @error('image')
+        <p class="text-sm text-red-600" role="alert">{{ $message }}</p>
+    @enderror
+
     </div>
 
-    <!-- Information -->
-    <div class="mb-4">
-            <label for="title" class="block text-sm text-gray-700">Information</label>
-            <input
-                type="text"
-                name="info"
-        id="info"
-        value="{{ old('info', $plant->info ?? '') }}"
-        required
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
-        @error('info')
-            <p class="text-sm text-red-600">{{ $message }}</p>
-        @enderror
-    </div>
-
-    <!-- Species -->
-    <div class="mb-4">
-            <label for="title" class="block text-sm text-gray-700">Species</label>
-            <input
-                type="text"
-                name="species"
-        id="species"
-        value="{{ old('species', $plant->species ?? '') }}"
-        required
-        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
-        @error('species')
-            <p class="text-sm text-red-600">{{ $message }}</p>
-        @enderror
-    </div>
 
     <!-- location dropdown -->
     <div class="mb-4">

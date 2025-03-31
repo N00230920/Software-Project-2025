@@ -28,9 +28,10 @@ class Plant extends Model
             return $this->belongsTo(Maintenance::class);
         }
 
-        public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'plant_user')->withTimestamps();
-    }
+        public function users()
+        {
+            return $this->belongsToMany(User::class, 'plant_user')->withPivot(['name', 'location', 'image'])->withTimestamps();
+        }
+        
 
 }

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Add this line
     ];
 
     /**
@@ -53,8 +54,9 @@ class User extends Authenticatable
 
     
 
-    public function plants():BelongsToMany
-    {
-        return $this->belongsToMany(Plant::class, 'plant_user')->withTimestamps();
-    }
+    public function plants()
+{
+    return $this->belongsToMany(Plant::class, 'plant_user')->withPivot(['name', 'location', 'image'])->withTimestamps();
+}
+
 }

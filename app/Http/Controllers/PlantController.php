@@ -23,7 +23,7 @@ class PlantController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->check() && auth()->user()->role !== 'admin') {
             return redirect()->route('plants.index')->with('error', 'Access Denied.');
         }
         return view('plants.create');
@@ -37,17 +37,19 @@ class PlantController extends Controller
         // Validate input
         $request->validate([
             'name' => 'required',
-            'info' => 'required|max:500',
-            'species' => 'required',
+            'info' => 'nullable|max:500',
+            'species' => 'nullable',
             'location' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:10240', // Updated max size
         ]);
 
         // Check if the image is uploaded and handle it
         $imageName = null; // Initialize imageName
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/plants'), $imageName);
+            if (!$request->image->move(public_path('images/plants'), $imageName)) {
+                return redirect()->back()->withErrors(['image' => 'Image upload failed. Please try again.']);
+            }
         }
 
         // Create a plant record in the database
@@ -70,7 +72,6 @@ class PlantController extends Controller
      * Display the specified resource.
      */
     public function show(Plant $plant)
-    
     {
         $plant->load('notes.user');
         $plant->load('maintenances.plant');
@@ -93,16 +94,17 @@ class PlantController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'info' => 'required|max:500',
             'location' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:10240', // Updated max size
         ]);
 
         // Check if the image is uploaded and handle it
         $imageName = null; // Initialize imageName
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images/plants'), $imageName);
+            if (!$request->image->move(public_path('images/plants'), $imageName)) {
+                return redirect()->back()->withErrors(['image' => 'Image upload failed. Please try again.']);
+            }
         }
 
         $plant->update(array_merge($validatedData, ['image' => $imageName]));

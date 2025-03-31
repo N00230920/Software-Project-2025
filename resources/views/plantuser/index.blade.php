@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Explore Plants') }}
+            {{ __('My Plants') }}
         </h2>
     </x-slot>
 
@@ -19,12 +19,11 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($plants as $plant)
                             <div class="bg-white rounded-lg shadow-md p-4">
-                                <a href ="{{ route('plants.show',$plant) }}">
-                                        <x-plant-card  
-                                            :name="$plant->name"
-                                            :image="$plant->image"
-                                        />
-                                        <a href="{{ route('plantuser.add', $plant->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Add Plant</a>
+                                <a href ="{{ route('plantuser.show',$plant) }}">
+                                    <x-plant-card  
+                                        :name="$plant->name"
+                                        :image="$plant->image"
+                                    />
                                 </a>
                             </div>
 
@@ -35,4 +34,3 @@
         </div>
     </div>
 </x-app-layout>
-

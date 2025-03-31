@@ -18,8 +18,9 @@
                         :info="$plant->info" 
                     />
 
-                    @if(auth()->user()->role==='admin')
-                    <a href="{{ route('plants.create', $plant) }}" 
+                    <!-- Add button -->
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                    <a href="{{ route('plantuser.add', $plant) }}" 
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                         Add to your garden
                     </a>
@@ -38,6 +39,8 @@
                                     <p>Task: {{ $note->task }} / 5</p>
                                     <p>{{ $note->note }}</p>
                                 </div>
+
+                                <!-- Edit and delete function for admins -->
                                     @if ($note->user_id === auth()->id() || auth()->user()?->role === 'admin')
                                         <a href="{{ route('notes.edit', $note) }}" 
                                             class="bg-yellow-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
@@ -85,21 +88,6 @@
                         @endif
                         </div>
                     </form>
-
-                    <!-- Maintenance Checklist -->
-                    <h4 class="font-semibold text-md mt-8">Make sure she lives</h4>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">1</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">2</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                        <label class="form-check-label" for="inlineCheckbox3">3</label>
-                    </div>
 </div>
                 </div>
             </div>

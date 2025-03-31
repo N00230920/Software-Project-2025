@@ -16,8 +16,14 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        if (!$user) {
+            // Handle the case where the user is not authenticated
+            return redirect()->route('login'); // or any other appropriate action
+        }
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+
         ]);
     }
 

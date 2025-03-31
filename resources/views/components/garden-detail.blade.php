@@ -1,4 +1,4 @@
-@props(['name', 'species', 'info', 'image'])
+@props(['name', 'species', 'info', 'image','location'])
 
 <div class="border rounded-lg shadow-md p-6 bg-white hover:shadow-lg transition duration-300 max-w-xl mx-auto"> <!-- Limit the overall container width to make the component more compact --> 
 
@@ -27,5 +27,8 @@
 
 <h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">Information</h3> <!-- Subheading for description --> 
 <p class="text-gray-700 leading-relaxed">{{ $info }}</p> <!-- Text is spaced out for readability --> 
+
+<h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">Location</h3> <!-- Subheading for description --> 
+<p class="text-gray-700 leading-relaxed">{{ $location }}</p> <!-- Text is spaced out for readability --> 
 
 </div> 

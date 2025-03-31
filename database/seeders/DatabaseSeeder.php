@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Test User',
-            'email' => 'tes@example.com',
+            'email' => 'unique_test_user@example.com', // Updated to a unique email
         ]);
 
         $users = User::factory(5)->create();

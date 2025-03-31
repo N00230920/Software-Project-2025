@@ -13,7 +13,8 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        //
+        $maintenances = Maintenance::all();
+        return view('maintenances.index', compact('maintenances'));
     }
 
     /**
@@ -21,13 +22,13 @@ class MaintenanceController extends Controller
      */
     public function create()
     {
-        //
+        return view('maintenances.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Plant $plant)
+    public function store(Request $request)
     {
         $request->validate([
             'task' => 'required',
@@ -35,7 +36,8 @@ class MaintenanceController extends Controller
             'care_level' => 'required',
         ]);
 
-        return redirect()->route('plant.show',$plant)->with('success','Task has been complete');
+        $maintenance = Maintenance::create($request->validated());
+        return redirect()->route('maintenances.index')->with('success', 'Maintenance task created successfully.');
     }
 
     /**
@@ -43,7 +45,7 @@ class MaintenanceController extends Controller
      */
     public function show(Maintenance $maintenance)
     {
-        //
+        return view('maintenances.show', compact('maintenance'));
     }
 
     /**
@@ -51,7 +53,7 @@ class MaintenanceController extends Controller
      */
     public function edit(Maintenance $maintenance)
     {
-        //
+        return view('maintenances.edit', compact('maintenance'));
     }
 
     /**
@@ -59,7 +61,8 @@ class MaintenanceController extends Controller
      */
     public function update(Request $request, Maintenance $maintenance)
     {
-        //
+        $maintenance->update($request->validated());
+        return redirect()->route('maintenances.index')->with('success', 'Maintenance task updated successfully.');
     }
 
     /**
@@ -67,6 +70,7 @@ class MaintenanceController extends Controller
      */
     public function destroy(Maintenance $maintenance)
     {
-        //
+        $maintenance->delete();
+        return redirect()->route('maintenances.index')->with('success', 'Maintenance task deleted successfully.');
     }
 }
