@@ -17,7 +17,6 @@
                     @csrf
                 <x-plant-form 
                     :action="route('plantuser.store', $plant->id)"
-
                     :method="'POST'"
                     enctype="multipart/form-data"
                 />

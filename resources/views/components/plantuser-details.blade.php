@@ -22,6 +22,10 @@
 
 <h2 class="text-gray-500 text-sm italic mb-4" style="font-size: 1rem;">Species: {{ $species }}</h2> <!-- Emphasizing year with italics and smaller text --> 
 
+<!-- Species --> 
+
+<h2 class="text-gray-500 text-sm italic mb-4" style="font-size: 1rem;">Location: {{ $location }}</h2> <!-- Emphasizing year with italics and smaller text --> 
+
 <!-- Information --> 
 
 <h3 class="text-gray-800 font-semibold mb-2" style="font-size: 2rem;">Information</h3> <!-- Subheading for description --> 

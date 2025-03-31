@@ -17,6 +17,10 @@ class PlantUser extends Model
         'name',
         'location',
         'image'
-
     ];
+
+    public function plant()
+    {
+        return $this->belongsTo(Plant::class);
+    }
 }
