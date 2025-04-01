@@ -14,11 +14,17 @@ class Maintenance extends Model
         'plant_id', 
         'task', 
         'frequency',
-        'care_level'
+        'care_level',
+        'plant_user_id',
     ];
 
     public function plant()
     {
         return $this->hasMany(Plant::class);
+    }
+
+    public function plantUser()
+    {
+        return $this->belongsTo(PlantUser::class);
     }
 }

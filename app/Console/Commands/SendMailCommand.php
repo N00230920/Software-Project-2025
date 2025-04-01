@@ -27,4 +27,26 @@ class SendMailCommand extends Command
     {
         logger()->info('send email');
     }
+
+    
+    /**
+     * Define the application's command schedule.
+     */
+    protected function schedule(Schedule $schedule): void
+    {
+        // Example scheduled task
+        $schedule->call(function () {
+            \Log::info('Scheduler is working!');
+        })->everyMinute();
+    }
+
+    /**
+     * Register the commands for the application.
+     */
+    protected function commands(): void
+    {
+        $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
+    }
 }
