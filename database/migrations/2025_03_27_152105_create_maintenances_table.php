@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('plant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('plant_user_id')->constrained()->onDelete('cascade');
             $table->string('task')->nullable();
             $table->integer('frequency')->nullable();
             $table->string('care_level')->nullable();

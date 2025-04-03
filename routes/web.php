@@ -36,6 +36,7 @@ Route::post('/plants/{plant}/notes', [NoteController::class,'store'])->name('not
 
 
 Route::resource("maintenance", MaintenanceController::class);
+Route::get('/index', [PlantUserController::class, 'index'])->name('maintenance.index');
 Route::post('/maintenance', [MaintenanceController::class,'store'])->name('maintenance.store');
 
 

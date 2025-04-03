@@ -34,11 +34,11 @@ class PlantUserController extends Controller
 
     public function store(Request $request, Plant $plant)
     {
-        // Validation with custom messages
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
+$request->validate([
+    'name' => 'required|string|max:255',
+    'location' => 'required|string|max:255',
+    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
+    // Add any new validation rules here
         ]);
     
         // Handle image upload

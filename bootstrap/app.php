@@ -17,4 +17,4 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })->create();
 
-    $app->register(App\Console\Commands\SendMailCommand::class);
+    $app->register(App\Console\Commands\SendMaintenanceReminders::class);

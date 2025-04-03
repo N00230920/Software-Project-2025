@@ -18,10 +18,6 @@ class Maintenance extends Model
         'plant_user_id',
     ];
 
-    public function plant()
-    {
-        return $this->hasMany(Plant::class);
-    }
 
     public function plantUser()
     {

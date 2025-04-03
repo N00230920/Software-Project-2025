@@ -12,20 +12,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // Example scheduled task
         $schedule->call(function () {
-            \Log::info('Scheduler is working!');
-        })->everyMinute();
-
-        
-        $schedule->call(function () {
-        $tasks = MaintenanceSchedule::where('schedule_date', today())->get();
-
-        foreach ($tasks as $task) {
-            // Send notification (email, push, etc.)
-            Notification::send($task->plantUser->user, new MaintenanceReminder($task));
-        }
-    })->daily();
+            $tasks = Maintenance::whereDate(
+                'last_maintenance_date',
+                today()->subDays('frequency')
+            )->get();
+    
+            foreach ($tasks as $task) {
+                Notification::send($task->plantUser->user, new MaintenanceReminder($task));
+    
+                // Update last maintenance date
+                $task->update(['last_maintenance_date' => today()]);
+            }
+        })->daily();
     }
 
     /**
@@ -37,11 +36,4 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
-
 }
-
-
-
-
-
-

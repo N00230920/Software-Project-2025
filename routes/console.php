@@ -11,8 +11,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-
-Schedule::command(SendMailCommand::class)->everyMinute();
-Schedule::call(function(){
-    logger('function only');
-})->everySecond();
+Artisan::command('maintenance:remind', function () {
+    $this->call('maintenance:remind');
+})->describe('Send maintenance reminders to users.');

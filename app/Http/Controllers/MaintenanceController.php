@@ -13,8 +13,8 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        $tasks = MaintenanceSchedule::where('plant_user_id', auth()->id())->get();
-        return view('schedules.index', compact('tasks'));
+        $tasks = Maintenance::where('plant_user_id', auth()->id())->get();
+        return view('maintenance.index', compact('tasks'));
     }
 
     /**
@@ -61,9 +61,7 @@ class MaintenanceController extends Controller
      */
     public function update(Request $request, Maintenance $maintenance)
     {
-        $task = MaintenanceSchedule::findOrFail($id);
-        $task->update(['status' => $request->status]);
-
+        $task = Maintenance::findOrFail($id);
         return back()->with('success', 'Task updated!');
     }
 
