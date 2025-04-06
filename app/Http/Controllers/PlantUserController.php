@@ -24,12 +24,14 @@ class PlantUserController extends Controller
 
     public function show($id)
     {
-        $plantUser = PlantUser::findOrFail($id);
+        $plantUser = PlantUser::with('maintenances')->findOrFail($id);
         if (!$plantUser) {
             return redirect()->route('plantuser.index')->withErrors(['error' => 'Plant user not found.']);
         }
         $plant = Plant::findOrFail($plantUser->plant_id); // Retrieve the associated Plant
-        return view('plantuser.show', compact('plantUser', 'plant')); // Pass both variables to the view
+        $maintenance = $plantUser->maintenances->first(); // Get the first maintenance record
+        $maintenancelogs = $plantUser->logs()->latest()->take(5)->get(); // Get recent maintenance logs
+        return view('plantuser.show', compact('plantUser', 'plant', 'maintenance', 'maintenancelogs')); // Pass all variables to the view
     }
 
     public function store(Request $request, Plant $plant)

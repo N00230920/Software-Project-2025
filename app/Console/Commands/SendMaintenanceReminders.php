@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use App\Models\Maintenance;
 use App\Notifications\MaintenanceReminder;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SendMaintenanceReminders extends Command
 {
@@ -27,21 +29,31 @@ class SendMaintenanceReminders extends Command
      * Execute the console command.
      */
     public function handle()
-    {
-        $tasks = Maintenance::whereRaw("DATE_ADD(updated_at, INTERVAL frequency DAY) <= CURDATE()")->get();
-    
-        if ($tasks->isEmpty()) {
-            $this->info('No maintenance tasks due today.');
-            return;
-        }
-    
-        foreach ($tasks as $task) {
-            Notification::send($task->plantUser->user, new MaintenanceReminder($task));
-            $task->update(['last_maintenance_date' => today()]);
-        }
-    
-        $this->info('Maintenance reminders sent.');
-    }
+{
+    Maintenance::with('plantUser.user')
+        ->whereRaw("DATE_ADD(updated_at, INTERVAL frequency DAY) <= CURDATE()")
+        ->chunk(100, function ($tasks) {
+            foreach ($tasks as $task) {
+                $user = $task->plantUser->user ?? null;
+
+                if ($user) {
+                    Notification::send($user, new MaintenanceReminder($task));
+
+                    Log::info('Maintenance reminder sent', [
+                        'user_id' => $user->id,
+                        'user_email' => $user->email,
+                        'plant_user_id' => $task->plant_user_id,
+                        'maintenance_id' => $task->id,
+                        'due_date' => $task->updated_at->addDays($task->frequency)->toDateString(),
+                    ]);
+                }
+
+                $task->update(['last_maintenance_date' => today()]);
+            }
+        });
+
+    $this->info('Maintenance reminders sent.');
+}
     
 
 }

@@ -52,8 +52,6 @@ class User extends Authenticatable
         return $this->hasMany(Note::class);
     }
 
-    
-
     public function plants()
 {
     return $this->belongsToMany(Plant::class, 'plant_user')->withPivot(['name', 'location', 'image'])->withTimestamps();

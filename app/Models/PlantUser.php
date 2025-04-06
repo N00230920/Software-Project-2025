@@ -9,6 +9,8 @@ class PlantUser extends Model
 {
     use HasFactory;
 
+
+
     protected $table = 'plant_user'; 
     protected $fillable = 
     [
@@ -23,4 +25,18 @@ class PlantUser extends Model
     {
         return $this->belongsTo(Plant::class);
     }
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}  
+public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+
+    public function logs()
+{
+    return $this->hasMany(MaintenanceLog::class);
+}
 }

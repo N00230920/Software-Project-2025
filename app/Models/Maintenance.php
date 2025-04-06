@@ -16,6 +16,8 @@ class Maintenance extends Model
         'frequency',
         'care_level',
         'plant_user_id',
+        'created_at',
+        'updated_at',
     ];
 
 
@@ -23,4 +25,10 @@ class Maintenance extends Model
     {
         return $this->belongsTo(PlantUser::class);
     }
+
+    public function logs()
+{
+    return $this->hasMany(MaintenanceLog::class);
+}
+
 }

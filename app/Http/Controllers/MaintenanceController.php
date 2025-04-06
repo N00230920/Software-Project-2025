@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Maintenance;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\PlantUser;
 
 class MaintenanceController extends Controller
 {
@@ -61,7 +62,7 @@ class MaintenanceController extends Controller
      */
     public function update(Request $request, Maintenance $maintenance)
     {
-        $task = Maintenance::findOrFail($id);
+        $maintenance->update($request->validated());
         return back()->with('success', 'Task updated!');
     }
 
@@ -73,4 +74,29 @@ class MaintenanceController extends Controller
         $maintenance->delete();
         return redirect()->route('maintenances.index')->with('success', 'Maintenance task deleted successfully.');
     }
+
+    public function complete(Request $request, Maintenance $maintenance)
+    {
+        
+        if (!$maintenance) {
+            return back()->with('error', 'Maintenance task not found.');
+        }
+
+        $request->validate([
+            'notes' => 'nullable|string',
+        ]);
+
+        $maintenance->logs()->create([
+            'plant_user_id' => auth()->id(),
+            'completed_at' => now(),
+        ]);
+
+        $maintenance->update([
+            'last_maintenance_date' => now(),
+        ]);
+
+        return redirect()->route('plantuser.show', ['id' => $maintenance->plant_user_id])
+->with('success', 'Maintenance task complete.');
+    }
+
 }

@@ -5,6 +5,10 @@
         </div>
     </x-slot>
 
+    <div class="py-12">
+        <x-alert-success>
+            {{session('success')}}
+        </x-alert-success>
     <!-- Plant Card -->
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -46,53 +50,42 @@
                     <div class="bg-green-200 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">
                             <h3 class="font-semibold text-lg mb-4 ">Maintenance</h3>
-                            <div class="bg-white p-12 mb-4 rounded-lg">
-                            <div class="flex flex-row gap-2 justify-between">
-                                <div class="text-center p-5 border-2 border-black">
-                                    <h2>Watering</h2>
-                                    <p>Water your plant every 2-3 days</p>
-                                </div>
-                                <div class="text-center p-5 border-2 border-black">
-                                    <h2>Watering</h2>
-                                    <p>Water your plant every 2-3 days</p>
-                                </div>
-
-                                <div class="text-center p-5 border-2 border-black">
-                                    <h2>Watering</h2>
-                                    <p>Water your plant every 2-3 days</p>
-                                </div>
-
+                            
+                            <h3 class="font-semibold text-lg mb-4">To do:</h3>
+                            @isset($maintenance)
+                            <div class="bg-white p-4 rounded-xl shadow mb-4">
+                                <form method="POST" action="{{ route('maintenance.complete', $maintenance->id) }}" method="POST" onsubmit="return confirm('Mark this task as completed?');">
+                                    @method('POST')
+                                    @csrf
+                                    <div class="flex items-center space-x-3">
+                                        <input type="checkbox" 
+                                                id="complete-task-{{ $maintenance->task }}" 
+                                                onchange="this.form.submit()" 
+                                                class="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500" />
+                                        <label for="complete-task-{{ $maintenance->task }}" class="text-lg font-medium">
+                                            {{ $maintenance->task }}
+                                        </label>
+                                    </div>
+                                </form>
                             </div>
-                        </div>
-
-                        <h3 class="font-semibold text-lg mb-4 ">To do:</h3>
-                        <div class="form-check">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Default checkbox
-                            </label>
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </div>
-
-                            <div class="form-check">
-
-                            <label class="form-check-label" for="flexCheckChecked">
-                                Checked checkbox
-                            </label>
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-
-                        </div>
+                            @endisset
 
                         <div class="py-12">
                             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                     <div class="p-6 text-gray-900">
                                         <h3 class="font-semibold text-lg mb-4">RECENT</h3>
-                                        <p>Watered - 2 days ago</p>
+                                            @foreach($maintenancelogs as $log)
+                                                <p>{{ $maintenancelog->maintenance_id->task}} - Completed: {{ $log->completed_at->format('M d, Y') }}</p>
+                                            @endforeach
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-            
+                        
+    
+
+
 
 </x-app-layout>
