@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('maintenance_logs', function (Blueprint $table) {
+        Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('maintenance_id')->constrained()->onDelete('cascade');
-            $table->foreignId('plant_user_id')->constrained()->onDelete('cascade'); // who completed it
-            $table->timestamp('completed_at');
+            $table->string('task');
+            $table->string('frequency'); // daily, weekly, monthly
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('maintenance_logs');
+        Schema::dropIfExists('maintenances');
     }
 };
+

@@ -36,14 +36,14 @@
                         @if($plantUsers->isEmpty())
                             <p class="text-gray-500">No plants found.</p>
                         @else
-                            @foreach($plantUsers as $plantUser)
+                            @foreach($plantUsers as $plant)
                                 <div class="bg-white rounded-lg shadow-md p-4">
-                                    <a href="{{ route('plantuser.show', $plantUser->id) }}">
+                                    <a href="{{ route('plantuser.show', $plant->id) }}">
                                         <x-plant-card  
-                                            :name="$plantUser->name"
-                                            :image="$plantUser->image"
+                                            :name="$plant->name"
+                                            :image="$plant->image"
                                         />
-                                        <p><strong>Location:</strong> {{ $plantUser->location }}</p>
+                                        <p><strong>Location:</strong> {{ $plant->location }}</p>
                                     </a>
                                 </div>
                             @endforeach

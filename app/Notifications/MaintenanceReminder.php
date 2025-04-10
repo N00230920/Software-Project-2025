@@ -9,14 +9,17 @@ use Illuminate\Notifications\Notification;
 
 class MaintenanceReminder extends Notification
 {
+
+    
     use Queueable;
 
+    public $task;
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        //
+        $this->task = $task;
     }
 
     /**
@@ -33,13 +36,18 @@ class MaintenanceReminder extends Notification
      * Get the mail representation of the notification.
      */
     public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
+{
+    
 
+    return (new MailMessage)
+        ->subject('Maintenance Reminder')
+        ->greeting("Hello {$notifiable->name},")
+        ->line('This is a friendly reminder to complete your pending maintenance task.')
+        ->line('Task: ' . $this->task->task) // Assuming $task is passed into the constructor
+        ->line('Due date: ' . $this->task->updated_at->addDays($this->task->frequency)->toFormattedDateString())
+        ->action('Complete Task', url('/tasks/' . $this->task->id)) // Link to complete the task
+        ->line('Thank you for using our service!');
+}
     /**
      * Get the array representation of the notification.
      *

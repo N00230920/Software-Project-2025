@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plant; 
 use Illuminate\Support\Facades\Storage; // Import Storage facade
+use App\Models\Maintenance;
+use App\Models\MaintenanceLog;
 use App\Models\PlantUser; // Import the PlantUser model
 
 class PlantUserController extends Controller
@@ -23,16 +25,39 @@ class PlantUserController extends Controller
     }
 
     public function show($id)
-    {
-        $plantUser = PlantUser::with('maintenances')->findOrFail($id);
-        if (!$plantUser) {
-            return redirect()->route('plantuser.index')->withErrors(['error' => 'Plant user not found.']);
-        }
-        $plant = Plant::findOrFail($plantUser->plant_id); // Retrieve the associated Plant
-        $maintenance = $plantUser->maintenances->first(); // Get the first maintenance record
-        $maintenancelogs = $plantUser->logs()->latest()->take(5)->get(); // Get recent maintenance logs
-        return view('plantuser.show', compact('plantUser', 'plant', 'maintenance', 'maintenancelogs')); // Pass all variables to the view
-    }
+{
+    $plantUser = PlantUser::findOrFail($id);
+    $plant = $plantUser->plant;
+
+    // Get incomplete maintenance tasks
+    $incompleteLogs = $plantUser->maintenances()
+        ->wherePivotNull('completed_at')
+        ->get();
+
+    // Get recent completed maintenance (last 3)
+    $completedLogs = $plantUser->maintenances()
+        ->wherePivotNotNull('completed_at')
+        ->orderByDesc('maintenance_log.completed_at')
+        ->take(3)
+        ->get();
+
+    return view('plantuser.show', compact(
+        'plantUser',
+        'plant',
+        'incompleteLogs',
+        'completedLogs'
+    ));
+}
+    
+
+public function maintenances()
+{
+    return $this->belongsToMany(Maintenance::class, 'maintenance_log')
+                ->withPivot('completed_at') // Expose pivot field
+                ->withTimestamps();
+}
+
+
 
     public function store(Request $request, Plant $plant)
     {
@@ -160,4 +185,23 @@ $request->validate([
     }
     
         
+public function completeTask($plantUserId, $maintenanceId)
+{
+    $plantUser = PlantUser::findOrFail($plantUserId);
+    $maintenance = Maintenance::findOrFail($maintenanceId);
+    
+    $plantUser->maintenances()->updateExistingPivot($maintenance->id, [
+        'completed_at' => now()
+    ]);
+    
+    return back()->with('success', 'Task completed!');
+}
+
+public function assignTasks(PlantUser $plantUser)
+{
+    $maintenances = Maintenance::all();
+    $plantUser->maintenances()->syncWithoutDetaching($maintenances);
+    
+    return back()->with('success', 'Maintenance tasks assigned');
+}
 }

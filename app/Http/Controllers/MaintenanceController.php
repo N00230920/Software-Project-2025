@@ -6,6 +6,7 @@ use App\Models\Maintenance;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PlantUser;
+use App\Models\MaintenanceLog;
 
 class MaintenanceController extends Controller
 {
@@ -14,8 +15,10 @@ class MaintenanceController extends Controller
      */
     public function index()
     {
-        $tasks = Maintenance::where('plant_user_id', auth()->id())->get();
-        return view('maintenance.index', compact('tasks'));
+        $tasks = Maintenance::whereHas('plantUsers', function($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
+        return view('plantuser.index', compact('tasks'));
     }
 
     /**
@@ -23,7 +26,8 @@ class MaintenanceController extends Controller
      */
     public function create()
     {
-        return view('maintenances.create');
+        $plants = PlantUser::where('user_id', auth()->id())->get();
+        return view('maintenance.create', compact('plants'));
     }
 
     /**
@@ -34,11 +38,12 @@ class MaintenanceController extends Controller
         $request->validate([
             'task' => 'required',
             'frequency' => 'required',
-            'care_level' => 'required',
+            'plant_user_id' => 'required|exists:plant_user,id'
         ]);
 
-        $maintenance = Maintenance::create($request->validated());
-        return redirect()->route('maintenances.index')->with('success', 'Maintenance task created successfully.');
+        $maintenance = Maintenance::create($request->all());
+        $maintenance->plantUsers()->attach($request->input('plant_user_id'));
+        return redirect()->route('plantuser.show', $maintenance)->with('success', 'Maintenance task created successfully.');
     }
 
     /**
@@ -46,7 +51,7 @@ class MaintenanceController extends Controller
      */
     public function show(Maintenance $maintenance)
     {
-        return view('maintenances.show', compact('maintenance'));
+        return view('plantuser.show', compact('maintenance'));
     }
 
     /**
@@ -54,7 +59,7 @@ class MaintenanceController extends Controller
      */
     public function edit(Maintenance $maintenance)
     {
-        return view('maintenances.edit', compact('maintenance'));
+        return view('maintenance.edit', compact('maintenance'));
     }
 
     /**
@@ -72,31 +77,44 @@ class MaintenanceController extends Controller
     public function destroy(Maintenance $maintenance)
     {
         $maintenance->delete();
-        return redirect()->route('maintenances.index')->with('success', 'Maintenance task deleted successfully.');
+        return redirect()->route('plantuser.index')->with('success', 'Maintenance task deleted successfully.');
     }
 
-    public function complete(Request $request, Maintenance $maintenance)
+    public function completeTask($maintenanceId)
     {
+        try {
+            // Find the maintenance task
+            $maintenance = Maintenance::findOrFail($maintenanceId);
         
-        if (!$maintenance) {
-            return back()->with('error', 'Maintenance task not found.');
+            // Check if the task is already completed by this user
+            $existingLog = $maintenance->logs()
+                ->where('plant_user_id', auth()->id())
+                ->first();
+        
+            if ($existingLog) {
+                return back()->with('error', 'This task has already been completed.');
+            }
+        
+            // Create a new log entry through the pivot relationship
+            $maintenance->plantUsers()->attach(auth()->id(), [
+                'completed_at' => now()
+            ]);
+        
+            // Update the maintenance's last maintenance date
+            $maintenance->update([
+                'completed_at' => now(),
+            ]);
+
+            // Redirect to the plant user's show page
+            $plantUser = PlantUser::where('user_id', auth()->id())
+                ->whereHas('maintenances', fn($q) => $q->where('maintenance_id', $maintenanceId))
+                ->firstOrFail();
+        
+            return redirect()->route('plantuser.show', $plantUser->id)
+                             ->with('success', 'Maintenance task complete!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error completing task: ' . $e->getMessage());
         }
-
-        $request->validate([
-            'notes' => 'nullable|string',
-        ]);
-
-        $maintenance->logs()->create([
-            'plant_user_id' => auth()->id(),
-            'completed_at' => now(),
-        ]);
-
-        $maintenance->update([
-            'last_maintenance_date' => now(),
-        ]);
-
-        return redirect()->route('plantuser.show', ['id' => $maintenance->plant_user_id])
-->with('success', 'Maintenance task complete.');
     }
 
 }

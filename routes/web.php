@@ -37,8 +37,9 @@ Route::post('/plants/{plant}/notes', [NoteController::class,'store'])->name('not
 
 Route::resource("maintenance", MaintenanceController::class);
 Route::post('/maintenance', [MaintenanceController::class,'store'])->name('maintenance.store');
-Route::post('/maintenance/{maintenance}/complete', [MaintenanceController::class, 'complete'])
-    ->middleware('auth')
+
+Route::get('/plantuser/{id}', [PlantUserController::class, 'show'])->name('plantuser.show');
+Route::post('/plantuser/{plantUser}/complete/{maintenance}', [PlantUserController::class, 'completeTask'])
     ->name('maintenance.complete');
 
 Route::resource('plant-user', PlantUserController::class);
@@ -50,7 +51,8 @@ Route::get('/plantuser/add/{plant}', [PlantUserController::class, 'create'])->na
 Route::get('/plantuser/{plantUser}/edit', [PlantUserController::class, 'edit'])->name('plantuser.edit');
 Route::put('/plantuser/{id}', [PlantUserController::class, 'update'])->name('plantuser.update');
 Route::delete('/plantuser/{id}', [PlantUserController::class, 'destroy'])->name('plantuser.destroy');
-
+Route::post('/plantuser/{plantUser}/assign-tasks', [PlantUserController::class, 'assignTasks'])
+    ->name('plantuser.assign-tasks');
 
 
 

@@ -10,7 +10,9 @@ class PlantUser extends Model
     use HasFactory;
 
 
-
+    protected $casts = [
+        'completed_at' => 'datetime',
+    ];
     protected $table = 'plant_user'; 
     protected $fillable = 
     [
@@ -30,13 +32,22 @@ class PlantUser extends Model
 {
     return $this->belongsTo(User::class);
 }  
-public function maintenances()
+    // Define the many-to-many relationship to Maintenance through the maintenance_log pivot table
+    public function maintenances()
     {
-        return $this->hasMany(Maintenance::class);
+        return $this->belongsToMany(Maintenance::class, 'maintenance_log')
+                    ->using(MaintenanceLog::class)
+                    ->withPivot('completed_at')
+                    ->withTimestamps();
     }
 
     public function logs()
-{
-    return $this->hasMany(MaintenanceLog::class);
-}
+    {
+        return $this->hasMany(MaintenanceLog::class, 'plant_user_id');
+    }
+
+    public function isEmpty()
+    {
+        return empty($this->name) && empty($this->location) && empty($this->image);
+    }
 }

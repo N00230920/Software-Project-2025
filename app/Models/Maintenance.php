@@ -11,24 +11,24 @@ class Maintenance extends Model
 
     protected $fillable = 
     [
-        'plant_id', 
         'task', 
         'frequency',
-        'care_level',
-        'plant_user_id',
-        'created_at',
-        'updated_at',
+        'description'
     ];
 
 
-    public function plantUser()
+    // Define the many-to-many relationship to PlantUser through the maintenance_log pivot table
+    public function plantUsers()
     {
-        return $this->belongsTo(PlantUser::class);
+        return $this->belongsToMany(PlantUser::class, 'maintenance_log')
+                    ->using(MaintenanceLog::class)
+                    ->withPivot('completed_at')
+                    ->withTimestamps();
     }
 
     public function logs()
-{
-    return $this->hasMany(MaintenanceLog::class);
-}
+    {
+        return $this->hasMany(MaintenanceLog::class, 'maintenance_id');
+    }
 
 }
