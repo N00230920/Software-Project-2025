@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\NoteController;
@@ -54,6 +55,6 @@ Route::delete('/plantuser/{id}', [PlantUserController::class, 'destroy'])->name(
 Route::post('/plantuser/{plantUser}/assign-tasks', [PlantUserController::class, 'assignTasks'])
     ->name('plantuser.assign-tasks');
 
-
+    Route::get('/weather', [WeatherController::class, 'show'])->name('weather.show');
 
 require __DIR__.'/auth.php';

@@ -23,6 +23,12 @@
                     </x-nav-link>
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('weather.show')" :active="request()->routeIs('weather.show')">
+                        {{ __('Weather') }}
+                    </x-nav-link>
+                </div>
+
                 @if(auth()->check() && auth()->user()->role === 'admin')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('plantuser.index')" :active="request()->routeIs('plantuser.index')">
