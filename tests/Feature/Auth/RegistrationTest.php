@@ -16,13 +16,35 @@ class RegistrationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_new_users_can_register(): void
+    // @return array[]
+
+    public static function userDataProvider():array
+    {
+        $user = [];
+
+        for ($i = 1;$i <= 100;$i++){
+            $user[]=[
+                'Test User' . $i,
+                'testuser' . $i . '@example.com',
+                'password',
+                $i % 2 === 0 ? 'admin':'user'
+            ];
+        }
+
+        return $user;
+    }
+
+    /**
+     * @dataProvider userDataProvider
+     */
+    public function test_new_users_can_register($name, $email, $password, $role): void
     {
         $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'password_confirmation' => $password,
+            'role' => $role,
         ]);
 
         $this->assertAuthenticated();

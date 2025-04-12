@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Plant;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 class PlantFactory extends Factory
 {
@@ -11,6 +12,13 @@ class PlantFactory extends Factory
 
     public function definition()
     {
+        
+        $imageFiles = Storage::files('public/images/plants');
+
+        $imagePath = count ($imageFiles) ? str_replace('public/','',
+        $this -> faker ->randomElement($imageFiles))
+        : '/default_plant.jpg';
+
         return [
             'name' => $this->faker->word,
             'species' => $this->faker->word,

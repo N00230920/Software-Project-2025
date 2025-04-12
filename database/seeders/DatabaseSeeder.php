@@ -26,9 +26,16 @@ class DatabaseSeeder extends Seeder
         $users = User::factory(5)->create();
         $plants = Plant::factory(10)->create();
 
-        // Attach random plants to users
+        // Create plant-user relationships with required fields
         $users->each(function ($user) use ($plants) {
-            $user->plants()->attach($plants->random(rand(1, 5))->pluck('id'));
+            $plants->random(rand(1, 5))->each(function ($plant) use ($user) {
+                \App\Models\PlantUser::factory()->create([
+                    'user_id' => $user->id,
+                    'plant_id' => $plant->id,
+                    'name' => $plant->name . ' ' . $user->name,
+                    'location' => 'Default Location'
+                ]);
+            });
         });
     }
 }

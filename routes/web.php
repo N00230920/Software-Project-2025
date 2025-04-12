@@ -55,6 +55,7 @@ Route::delete('/plantuser/{id}', [PlantUserController::class, 'destroy'])->name(
 Route::post('/plantuser/{plantUser}/assign-tasks', [PlantUserController::class, 'assignTasks'])
     ->name('plantuser.assign-tasks');
 
-    Route::get('/weather', [WeatherController::class, 'show'])->name('weather.show');
+Route::get('/weather', [WeatherController::class, 'show'])->name('weather.show');
+Route::get('/api/current-weather', [WeatherController::class, 'apiCurrentWeather']);
 
 require __DIR__.'/auth.php';

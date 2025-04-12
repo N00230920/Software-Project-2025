@@ -61,11 +61,15 @@ public function maintenances()
 
     public function store(Request $request, Plant $plant)
     {
-$request->validate([
-    'name' => 'required|string|max:255',
-    'location' => 'required|string|max:255',
-    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
-    // Add any new validation rules here
+        // Check if user is admin
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('plantuser.index')->with('error', 'Access denied');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
         ]);
     
         // Handle image upload
@@ -80,7 +84,7 @@ $request->validate([
             'name' => $request->name,
             'location' => $request->location,
             'image' => $imageName ?? null,
-            'plant_id' => $plant->id,  // Ensure $plant is an object and get its ID
+            'plant_id' => $plant->id,
             'user_id' => Auth::id(),
         ];
     
