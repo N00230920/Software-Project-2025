@@ -4,6 +4,17 @@
             {{ __('Explore Plants') }}
         </h2>
     </x-slot>
+    
+        @auth
+                @foreach(auth()->user()->unreadNotifications as $notification)
+                    <x-alert-success class="py-12">
+                        {{ $notification->data['message'] }}
+                    </x-alert-success>
+                    @php
+                        $notification->markAsRead();
+                    @endphp
+                @endforeach
+        @endauth
 
     <!-- alert success is a component that i created to display a success message that is sent by the controller to give feedback to the user-->
     <div class="py-12">
