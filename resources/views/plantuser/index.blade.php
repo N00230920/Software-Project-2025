@@ -17,8 +17,8 @@
                 
                     <!-- Search Form -->
                         <form method="GET" action="{{ url('/search-plant-user') }}" class="mb-4">
-                            <select name="location" class="border rounded p-2">
-                                <option value="">Select a location</option>
+                            <select name="location" class="border border-green-600 rounded-lg p-2">
+                                <option value="">Location</option>
                                 <option value="Bedroom">Bedroom</option>
                                 <option value="Living Room">Living Room</option>
                                 <option value="Bathroom">Bathroom</option>

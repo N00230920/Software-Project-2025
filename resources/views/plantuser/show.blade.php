@@ -21,24 +21,7 @@
                         :species="$plant?->species"
                         :info="$plant?->info"
                         :location="$plantUser->location" 
-                    />
-
-                    <!-- Edit and Delete Buttons -->
-                    <div class="flex space-x-2 mt-4">
-                        <a href="{{ route('plantuser.edit', $plantUser->id) }}" 
-                            class="text-gray-600 hover:bg-orange-300 hover:bg-orange-700 font-bold py-2 px-4 rounded">
-                            Edit
-                        </a>
-
-                        <form action="{{ route('plantuser.destroy', $plantUser->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plant from garden?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                class="bg-red-500 hover:bg-red-700 text-gray-600 font-bold py-2 px-4 rounded">
-                                Delete
-                            </button>
-                        </form>
-                    </div>   
+                    />                    
                     
                     <!-- Maintenance Section -->
                     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -96,8 +79,27 @@
                             @endif
                         </div>
                     </div>
+
+                    <!-- Edit and Delete Buttons -->
+                    <div class="flex space-x-2 mt-4">
+                        <a href="{{ route('plantuser.edit', $plantUser->id) }}" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Edit
+                        </a>
+
+                        <form action="{{ route('plantuser.destroy', $plantUser->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this plant from garden?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                            class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
+        
     </div>
 </x-app-layout>
